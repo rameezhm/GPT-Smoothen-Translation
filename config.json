@@ -1,0 +1,4 @@
+{
+    "model": "gpt-3.5-turbo",
+    "prompt": "You will receive an English translation of a Japanese/Korean/Chinese web novel. Please rewrite this translation such that it reads more smoothly while still retaining as much of the original writing and structure as possible."
+}

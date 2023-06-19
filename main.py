@@ -1,35 +1,35 @@
-import sys
-import json
-import openai
+import sys, os, json, openai
 
 config = json.load(open('config.json', 'r'))
-
 openai.api_key = open("OPENAI_KEY").read().strip()
-print("OpenAI key loaded")
+input_files = os.listdir('input')
 
-print("Reading chapter text ...")
-chapter_text = open("chapter.txt", encoding='utf-8').read()
-print("Chapter text loaded")
+for file in input_files:
+    print("Reading", file, "...")
+    chapter_text = open('input/' + file, encoding='utf-8').read()
 
-print("Sending chapter to OpenAI ...")
-chat_completion = openai.ChatCompletion.create(
-    model = config.model,
-    messages = [
-        {
-            "role": "system",
-            "content": config.prompt
-        },
-        {
-            "role": "user",
-            "content": chapter_text
-        }
-    ]
-)
-print("AI processing complete")
+    print("Sending text to OpenAI ...")
+    chat_completion = openai.ChatCompletion.create(
+        model = config['model'],
+        messages = [
+            {
+                "role": "system",
+                "content": config['prompt']
+            },
+            {
+                "role": "user",
+                "content": chapter_text
+            }
+        ]
+    )
 
-output_text = chat_completion.choices[0].message.content
+    print(chat_completion)
 
-print("Writing output to file ...")
-open("chapter_out.txt", 'w', encoding='utf-8').write(output_text)
-print("Output saved")
+    output_text = chat_completion.choices[0].message.content
+
+    print("Writing", file, "output to file ...")
+    open('output/' + file, 'w', encoding='utf-8').write(output_text)
+    print("Output saved")
+
+print("All files completed")
 
